@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stratum - CPU-Native Proof of Work</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">Stratum</a>
+            <ul class="nav-links">
+                <li><a href="#concept">Concept</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#whitepaper" class="nav-cta">Whitepaper</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Stratum</h1>
+            <p class="subtitle">CPU-Native Proof of Work — Restoring viability to commodity hardware mining</p>
+            
+            <div class="stratum-visualization">
+                <div class="comparison">
+                    <div class="comparison-item asic">
+                        <div class="item-label">Traditional ASIC</div>
+                        <div class="item-value">100,000×</div>
+                        <div class="item-description">efficiency advantage</div>
+                    </div>
+                    
+                    <div class="vs-symbol">VS</div>
+                    
+                    <div class="comparison-item stratum">
+                        <div class="item-label">Stratum CPU</div>
+                        <div class="item-value">47×</div>
+                        <div class="item-description">efficiency advantage</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-buttons">
+                <a href="https://github.com/baiehclaca/Stratum" class="btn btn-primary" target="_blank">View on GitHub</a>
+                <a href="#concept" class="btn btn-secondary">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="concept" class="section">
+        <div class="container">
+            <h2>The Problem</h2>
+            <p class="section-intro">
+                Traditional proof-of-work algorithms like SHA-256 strip CPUs down to bitwise operations, giving ASICs a structural advantage of up to 100,000×. This makes CPU mining economically unviable.
+            </p>
+            
+            <div class="cards">
+                <div class="card">
+                    <h3>ASIC Dominance</h3>
+                    <p>Specialized circuits eliminate CPU overhead, creating massive efficiency gaps that make commodity hardware uncompetitive.</p>
+                </div>
+                <div class="card">
+                    <h3>Wasted Potential</h3>
+                    <p>CPU features like caches, branch prediction, and speculative execution become liabilities instead of computational assets.</p>
+                </div>
+                <div class="card">
+                    <h3>Centralization</h3>
+                    <p>Mining becomes accessible only to those who can afford expensive, proprietary hardware.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="architecture" class="section section-alt">
+        <div class="container">
+            <h2>The Solution</h2>
+            <p class="section-intro">
+                Stratum inverts this by making CPU overhead <strong>the computation itself</strong>. Cache hierarchies, branch prediction, and speculative execution become load-bearing to the algorithm.
+            </p>
+            
+            <div class="architecture-grid">
+                <div class="arch-card">
+                    <div class="arch-number">1</div>
+                    <h3>ZK Proofs of Cache</h3>
+                    <p>STARK proofs cryptographically verify cache execution, enabling O(log n) verification without re-computation.</p>
+                </div>
+                <div class="arch-card">
+                    <div class="arch-number">2</div>
+                    <h3>Software Cache Model</h3>
+                    <p>Deterministic cache hierarchy guarantees identical output across all hardware implementations.</p>
+                </div>
+                <div class="arch-card">
+                    <div class="arch-number">3</div>
+                    <h3>ISA Profiles</h3>
+                    <p>Algorithm supports multiple processor instruction sets while maintaining security and efficiency.</p>
+                </div>
+                <div class="arch-card">
+                    <div class="arch-number">4</div>
+                    <h3>Hardware Parity</h3>
+                    <p>An ASIC attempting to optimize Stratum would, by definition, become a CPU—structural parity achieved.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="whitepaper">
+        <div class="container">
+            <h2>Research & Documentation</h2>
+            <div class="docs-grid">
+                <a href="stratum_final.pdf" class="doc-card" target="_blank">
+                    <div class="doc-icon">📄</div>
+                    <h3>Whitepaper</h3>
+                    <p>Read the complete technical specification and mathematical foundations of Stratum.</p>
+                </a>
+                <a href="https://github.com/baiehclaca/Stratum" class="doc-card" target="_blank">
+                    <div class="doc-icon">💻</div>
+                    <h3>GitHub Repository</h3>
+                    <p>Access the source code, reference implementation, and community discussions.</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Stratum. A revolutionary proof-of-work algorithm for CPU-native mining.</p>
+            <p><a href="https://github.com/baiehclaca/Stratum" target="_blank">GitHub</a></p>
+        </div>
+    </footer>
+</body>
+</html>
