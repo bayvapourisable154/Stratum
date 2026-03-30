@@ -1,101 +1,355 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stratum — CPU-Native Proof of Work</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stratum — CPU-Native Proof of Work</title>
+  <meta name="description" content="A proof-of-work algorithm where CPU architecture becomes the load-bearing computation. Making commodity hardware competitively viable again.">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:  #000;
+      --dim:  #555;
+      --pale: #999;
+      --rule: #e8e8e8;
+      --code: #f5f5f5;
+      --max:  640px;
+      --mono: 'SFMono-Regular', 'Fira Mono', 'Consolas', 'Menlo', monospace;
+      --sans: system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ink:  #f5f5f5;
+        --dim:  #aaa;
+        --pale: #666;
+        --rule: #222;
+        --code: #1a1a1a;
+      }
+      body { background: #0f0f0f; }
+    }
+
+    html { font-size: 13px; }
+
+    body {
+      background: #fff;
+      color: var(--ink);
+      font-family: var(--sans);
+      line-height: 1.65;
+      padding: 0 24px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .wrap {
+      max-width: var(--max);
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 80px 0 64px;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .logotype {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+
+    .headline {
+      margin-top: 28px;
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 1.4;
+      letter-spacing: -.01em;
+      color: var(--ink);
+    }
+
+    .sub {
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--dim);
+      max-width: 480px;
+      line-height: 1.7;
+    }
+
+    .cta {
+      margin-top: 28px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .cta a {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--ink);
+      border-bottom: 1px solid var(--ink);
+      padding-bottom: 1px;
+    }
+
+    .cta a.secondary {
+      color: var(--dim);
+      border-color: var(--dim);
+      font-weight: 400;
+    }
+
+    .cta a:hover { opacity: .6; }
+
+    section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    section:last-of-type { border-bottom: none; }
+
+    .label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--pale);
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--ink);
+    }
+
+    p {
+      font-size: 13px;
+      color: var(--dim);
+      line-height: 1.7;
+      margin-bottom: 10px;
+    }
+
+    p:last-child { margin-bottom: 0; }
+
+    .flow {
+      margin: 20px 0 0;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      line-height: 1.8;
+      color: var(--dim);
+    }
+
+    .flow .status { color: var(--ink); font-weight: 600; }
+    .flow .val { color: var(--ink); font-weight: 600; }
+    .flow .arrow { color: var(--pale); }
+
+    .comparison {
+      display: flex;
+      gap: 20px;
+      margin: 20px 0 0;
+    }
+
+    .comparison-item {
+      flex: 1;
+    }
+
+    .comparison-item strong {
+      display: block;
+      color: var(--ink);
+      font-weight: 600;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .comparison-item span {
+      display: block;
+      font-family: var(--mono);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+
+    .comparison-item p {
+      font-size: 11px;
+      color: var(--pale);
+      margin: 0;
+    }
+
+    .components {
+      list-style: none;
+      margin-top: 4px;
+    }
+
+    .components li {
+      display: flex;
+      gap: 16px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--rule);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .components li:last-child { border-bottom: none; }
+
+    .components li::before {
+      content: '→';
+      color: var(--pale);
+      min-width: 14px;
+      flex-shrink: 0;
+    }
+
+    .components li strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .components li .detail {
+      color: var(--dim);
+      display: block;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    code {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--ink);
+    }
+
+    p code {
+      background: var(--code);
+      padding: 1px 5px;
+      border-radius: 2px;
+    }
+
+    footer {
+      padding: 40px 0 64px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    footer span, footer a {
+      font-size: 11px;
+      color: var(--pale);
+      text-decoration: none;
+      letter-spacing: .02em;
+    }
+
+    footer a:hover { color: var(--ink); }
+
+    @media (max-width: 480px) {
+      header { padding: 56px 0 48px; }
+      .headline { font-size: 18px; }
+      .comparison { flex-direction: column; }
+    }
+  </style>
 </head>
 <body>
-    <header class="header">
-        <div class="header-top">
-            <h1 class="title">Stratum</h1>
-            <span class="subtitle">CPU-Native Proof of Work</span>
-        </div>
-        <nav class="nav">
-            <a href="#overview" class="nav-link">Overview</a>
-            <a href="#mechanism" class="nav-link">Mechanism</a>
-            <a href="#research" class="nav-link">Research</a>
-            <a href="https://github.com/baiehclaca/Stratum" class="nav-link nav-external" target="_blank">GitHub</a>
-        </nav>
-    </header>
+<div class="wrap">
 
-    <main>
-        <section class="hero">
-            <div class="hero-content">
-                <h2>The ASIC Inversion</h2>
-                <p class="hero-text">
-                    A proof-of-work algorithm where CPU architecture becomes the load-bearing computation itself. ASICs that attempted to optimize for Stratum would, by definition, become CPUs.
-                </p>
-                <div class="metrics">
-                    <div class="metric">
-                        <span class="metric-value">100,000×</span>
-                        <span class="metric-label">Traditional ASIC advantage</span>
-                    </div>
-                    <div class="metric">
-                        <span class="metric-value">47×</span>
-                        <span class="metric-label">Stratum efficiency gap</span>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <header>
+    <div class="logotype">Stratum</div>
+    <h1 class="headline">CPU-native proof of work.</h1>
+    <p class="sub">
+      A proof-of-work algorithm that inverts the ASIC advantage. By making CPU architecture—caches, branch prediction, speculative execution—the load-bearing computation itself,
+      any attempt to optimize Stratum would, by definition, become a CPU. Structural parity achieved.
+    </p>
+    <div class="cta">
+      <a href="https://github.com/baiehclaca/Stratum">GitHub</a>
+      <a href="#problem" class="secondary">How it works</a>
+    </div>
+  </header>
 
-        <section id="overview" class="section">
-            <h2 class="section-title">Problem</h2>
-            <p class="text-block">
-                SHA-256 and similar algorithms strip CPUs to their core operations—bitwise functions and modular arithmetic. Every other CPU feature (caches, branch prediction, speculative execution) becomes wasted overhead. ASICs eliminate this waste, achieving efficiency ratios as high as 100,000×. This creates insurmountable barriers to CPU mining.
-            </p>
-        </section>
+  <section id="problem">
+    <div class="label">Problem</div>
+    <p>
+      SHA-256 and similar algorithms strip CPUs to bitwise operations. Every CPU feature—cache hierarchies, branch prediction, speculative execution—becomes wasted overhead.
+      ASICs eliminate this overhead, achieving efficiency ratios of 100,000× over CPUs. This structural advantage makes CPU mining economically unviable.
+    </p>
+    <div class="comparison" style="margin-top: 20px;">
+      <div class="comparison-item">
+        <strong>Traditional ASIC</strong>
+        <span>100,000×</span>
+        <p>efficiency advantage</p>
+      </div>
+      <div class="comparison-item">
+        <strong>Stratum CPU</strong>
+        <span>47×</span>
+        <p>efficiency gap</p>
+      </div>
+    </div>
+  </section>
 
-        <section class="section">
-            <h2 class="section-title">Solution</h2>
-            <p class="text-block">
-                Stratum makes CPU overhead the computation. Multi-level cache hierarchies, branch prediction, and speculative execution are not overhead—they are the algorithm. This creates structural parity between commodity hardware and any hypothetical specialized circuit.
-            </p>
-        </section>
+  <section>
+    <div class="label">Solution</div>
+    <p>
+      Stratum makes CPU overhead the computation. Multi-level cache hierarchies, branch prediction, and out-of-order execution are not wasted—they are load-bearing to the algorithm.
+      Any ASIC that attempted to replicate this behavior would, structurally, be a CPU. Commodity hardware becomes competitively viable.
+    </p>
+  </section>
 
-        <section id="mechanism" class="section">
-            <h2 class="section-title">Core Components</h2>
-            <div class="components">
-                <div class="component">
-                    <h3>ZK Proofs of Cache</h3>
-                    <p>STARK proofs verify cache execution. Verification: O(log n) time, ~50ms. Proof size: ~120 KB. No trusted setup required.</p>
-                </div>
-                <div class="component">
-                    <h3>Software Cache Model</h3>
-                    <p>Canonical cache geometry: L1 (256 KB), L2 (1 MB), L3 (12 MB). Deterministic behavior across all hardware. 18–22% overhead vs. native execution.</p>
-                </div>
-                <div class="component">
-                    <h3>ISA Profiles</h3>
-                    <p>Algorithm specified as core logic plus ISA profiles. Portable across processor architectures while maintaining security guarantees.</p>
-                </div>
-                <div class="component">
-                    <h3>Hardware Parity</h3>
-                    <p>An ASIC that replicates Stratum's cache behavior is, structurally, a CPU. Commodity hardware becomes competitively viable.</p>
-                </div>
-            </div>
-        </section>
+  <section>
+    <div class="label">Architecture</div>
 
-        <section id="research" class="section">
-            <h2 class="section-title">Research</h2>
-            <div class="research-links">
-                <a href="stratum_final.pdf" class="research-link" target="_blank">
-                    <span class="research-label">Whitepaper</span>
-                    <span class="research-desc">Complete technical specification and mathematical foundations</span>
-                </a>
-                <a href="https://github.com/baiehclaca/Stratum" class="research-link" target="_blank">
-                    <span class="research-label">GitHub</span>
-                    <span class="research-desc">Source code and reference implementation</span>
-                </a>
-            </div>
-        </section>
-    </main>
+    <h2>Core components</h2>
+    <ul class="components">
+      <li>
+        <strong>ZK Proofs of Cache</strong>
+        <span class="detail">STARK proofs verify cache execution. O(log n) verification time (~50ms). ~120 KB proofs. No trusted setup.</span>
+      </li>
+      <li>
+        <strong>Software Cache Model</strong>
+        <span class="detail">Canonical cache geometry (L1: 256 KB, L2: 1 MB, L3: 12 MB). Deterministic across all hardware. 18–22% overhead vs. native execution.</span>
+      </li>
+      <li>
+        <strong>ISA Profiles</strong>
+        <span class="detail">Algorithm specified as core logic plus ISA profiles. Portable across processor architectures while maintaining security.</span>
+      </li>
+      <li>
+        <strong>Hardware Parity</strong>
+        <span class="detail">An ASIC that replicates Stratum's cache behavior is, by definition, a CPU. Commodity hardware achieves structural parity.</span>
+      </li>
+    </ul>
 
-    <footer class="footer">
-        <p>Stratum: A revolutionary approach to proof-of-work that restores CPU mining viability.</p>
-    </footer>
+    <h2 style="margin-top: 28px;">Design principles</h2>
+
+    <p style="margin-top: 12px;">
+      <strong>Currency-agnostic.</strong> The whitepaper defines the algorithm. Implementation can use any payment method. Commodity hardware mining becomes economically viable for the first time.
+    </p>
+
+    <p style="margin-top: 12px;">
+      <strong>Deterministic execution.</strong> Software-emulated cache guarantees identical output across all hardware that faithfully implements the model, regardless of physical cache behavior or thermal throttling.
+    </p>
+
+    <p style="margin-top: 12px;">
+      <strong>Transparent verification.</strong> Full nodes verify STARK proofs in milliseconds, without re-running the computation. No trusted setup. No intermediaries.
+    </p>
+  </section>
+
+  <section>
+    <div class="label">Research</div>
+    <p>
+      Read the <a href="stratum_final.pdf" style="color:var(--ink);border-bottom:1px solid var(--ink)">whitepaper</a> for complete technical specification, mathematical foundations, and security analysis.
+    </p>
+  </section>
+
+  <footer>
+    <span>Stratum · MIT License</span>
+    <div style="display:flex;gap:20px">
+      <a href="https://github.com/baiehclaca/Stratum">GitHub</a>
+      <a href="stratum_final.pdf">Whitepaper</a>
+      <a href="https://github.com/baiehclaca/Stratum/blob/main/README.md">Docs</a>
+    </div>
+  </footer>
+
+</div>
 </body>
 </html>
